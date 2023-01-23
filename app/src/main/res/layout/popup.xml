@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/popup">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:flow_horizontalAlign="center"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/register_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:fontFamily="sans-serif-black"
+            android:paddingTop="30sp"
+            android:text="EATRIUM"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_light"
+            android:textSize="70sp" />
+
+        <EditText
+            android:id="@+id/register_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_prim_dark"
+            android:fontFamily="sans-serif"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_dark"
+            android:textColorHint="@color/color_prim_dark" />
+
+        <EditText
+            android:id="@+id/register_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_prim_dark"
+            android:fontFamily="sans-serif"
+            android:ems="10"
+            android:hint="User ID"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:shadowColor="@color/color_prim_light"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_dark"
+            android:textColorHint="@color/color_prim_dark" />
+
+        <EditText
+            android:id="@+id/register_yearlevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_prim_dark"
+            android:fontFamily="sans-serif"
+            android:ems="10"
+            android:hint="Year Level"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_dark"
+            android:textColorHint="@color/color_prim_dark" />
+
+        <Button
+            android:id="@+id/register_createAcc"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150sp"
+            android:layout_marginTop="12sp"
+            android:layout_marginRight="150sp"
+            android:backgroundTint="@color/color_prim_dark"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:maxHeight="100sp"
+            android:minHeight="48sp"
+            android:paddingTop="8sp"
+            android:paddingBottom="12sp"
+            android:shadowColor="@color/colorAccent"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="0"
+            android:text="create account"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textColorHighlight="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textColorLink="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/register_cancel"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150sp"
+            android:layout_marginTop="12sp"
+            android:layout_marginRight="150sp"
+            android:backgroundTint="@color/color_prim_light"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:maxHeight="100sp"
+            android:minHeight="48sp"
+            android:paddingTop="8sp"
+            android:paddingBottom="12sp"
+            android:shadowColor="@color/colorAccent"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="0"
+            android:text="cancel"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textColorHighlight="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textColorLink="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/register_userMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14sp"
+            android:layout_marginBottom="30sp"
+            android:background="@color/color_prim_dark"
+            android:paddingTop="8sp"
+            android:paddingBottom="8sp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

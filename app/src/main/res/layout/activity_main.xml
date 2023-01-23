@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="@color/color_prim_light"
+    android:paddingTop="?attr/actionBarSize"
+    android:textAlignment="center">
+
+    <LinearLayout
+        android:id="@+id/Main_Page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150sp"
+        android:background="#FFFFFF"
+        android:backgroundTint="@color/color_prim_dark"
+        android:gravity="clip_horizontal|center_horizontal"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="133sp"
+            android:layout_marginTop="150sp"
+            android:orientation="vertical"
+            android:textAlignment="center">
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="sans-serif-black"
+                android:text="EATRIUM"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="70sp" />
+
+            <TextView
+                android:id="@+id/title_subtext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="android client"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/user_id_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="20sp"
+            android:autoText="false"
+            android:backgroundTint="@color/color_prim_light"
+            android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:hint="@string/hintUserId"
+            android:inputType="textPersonName"
+            android:minHeight="48sp"
+            android:shadowColor="@color/color_prim_light"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_light"
+            android:textColorHighlight="@color/color_prim_light"
+            android:textColorHint="@color/color_prim_light"
+            android:textColorLink="@color/color_prim_light" />
+
+        <Button
+            android:id="@+id/register_createAcc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150sp"
+            android:layout_marginTop="12sp"
+            android:layout_marginRight="150sp"
+            android:backgroundTint="@color/color_prim_light"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:maxHeight="100sp"
+            android:minHeight="48sp"
+            android:onClick="logIn"
+            android:paddingTop="8sp"
+            android:paddingBottom="12sp"
+            android:shadowColor="@color/colorAccent"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="0"
+            android:text="LOGIN"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textColorHighlight="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textColorLink="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/create_account"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:backgroundTint="#00FFFFFF"
+            android:padding="20dp"
+            android:shadowColor="#00FFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:text="create an account"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_light"
+            android:onClick="createAcc"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

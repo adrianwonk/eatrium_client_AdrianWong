@@ -1,7 +1,7 @@
 package edu.cis.ibcs_app.Utils;
 
 public class CISConstants {
-    public static final String HOST = "https://e024-112-119-216-66.ap.ngrok.io";
+    public static final String HOST = "https://0401-112-119-225-62.ap.ngrok.io";
 
     //return strings
     public static final String DUP_ORDER_ERR = "Error: meal/drink already ordered by this user.";

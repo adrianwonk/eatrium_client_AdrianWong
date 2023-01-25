@@ -121,15 +121,21 @@
             android:id="@+id/modify_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/color_prim_dark"
             android:text="SAVE!"
             android:textColor="@color/colorAccent" />
 
         <TextView
-            android:id="@+id/modify_invalidInputs"
+            android:id="@+id/modify_errorMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Please provide valid inputs!"
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

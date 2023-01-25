@@ -1,11 +1,7 @@
 package edu.cis.ibcs_app.Models;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,14 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.view.LayoutInflaterCompat;
+import androidx.appcompat.view.menu.MenuAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import edu.cis.ibcs_app.Controllers.Actions;
@@ -29,12 +24,12 @@ import edu.cis.ibcs_app.Controllers.MainActivity;
 import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
-public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemViewHolder> {
+public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemViewHolder> {
 
     ArrayList<MenuItem> mdata;
     MainActivity mainActivity;
 
-    public Admin_menuItemAdapter(MainActivity ma) {
+    public Orders_itemsAdapter(MainActivity ma) {
         mainActivity = ma;
         mdata = new ArrayList<MenuItem>();
         update();
@@ -44,13 +39,13 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
 
         Snackbar snackbar = Snackbar.make(mainActivity.findViewById(android.R.id.content), "Processing", BaseTransientBottomBar.LENGTH_INDEFINITE);
         snackbar.show();
-        Admin_getMenuitems getMenuitems = new Admin_getMenuitems();
+        Orders_itemsAdapter.Orders_getMenuItems getMenuitems = new Orders_getMenuItems();
         getMenuitems.run();
         notifyDataSetChanged();
         snackbar.dismiss();
     }
 
-    public class Admin_getMenuitems implements Runnable{
+    public class Orders_getMenuItems implements Runnable{
 
         @Override
         public void run() {
@@ -89,13 +84,12 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
 
     @Override
     public void onBindViewHolder(@NonNull Admin_menuItemViewHolder holder, int position) {
-
         MenuItem item = mdata.get(position);
         holder.amountAvail.setText("" + item.amountAvailable + " left");
         holder.desc.setText(item.description);
         holder.name.setText(item.name);
         holder.price.setText("Price: $" + item.price);
-        holder.button.setText("EDIT");
+        holder.button.setText("ADD TO CART");
 
         String id = item.id;
 
@@ -103,36 +97,9 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//              POPUP --
-                AlertDialog.Builder builder;
-                LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
-                builder = new AlertDialog.Builder(mainActivity);
-                View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.menu_item_modify, null);
-
-                EditText name = popupView.findViewById(R.id.modify_name);
-                EditText desc = popupView.findViewById(R.id.modify_desc);
-                EditText price = popupView.findViewById(R.id.modify_price);
-                EditText amount = popupView.findViewById(R.id.modify_amountAvail);
-                EditText type = popupView.findViewById(R.id.modify_type);
-                TextView id = popupView.findViewById(R.id.modify_idview);
-                Button b = popupView.findViewById(R.id.modify_button);
-                TextView error = popupView.findViewById(R.id.modify_errorMsg);
-
-//              OPTIONAL --
-                name.setText(item.name);
-                desc.setText(item.description);
-                price.setText("" + item.price);
-                amount.setText("" + item.amountAvailable);
-                type.setText(item.type);
-                id.setText("ID: " + item.id);
-//              -- OPTIONAL
-
-                builder.setView(popupView);
-                final AlertDialog dialog = builder.create();
-                Actions.setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, item.id, error, mainActivity);
-                dialog.show();
-//              -- POPUP
+                String result = "id: " + id + "\nname: " + item.name;
+                Log.d("server", "ADD TO CART: " + result);
+//                Request req = new Request(CISConstants.PLACE_ORDER);
             }
         });
     }

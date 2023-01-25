@@ -24,6 +24,7 @@ import edu.cis.ibcs_app.Models.Admin_menuItemAdapter;
 import edu.cis.ibcs_app.Models.CISUser;
 import edu.cis.ibcs_app.Models.MenuItem;
 import edu.cis.ibcs_app.Models.Order;
+import edu.cis.ibcs_app.Models.Orders_itemsAdapter;
 import edu.cis.ibcs_app.Models.Request;
 import edu.cis.ibcs_app.Models.SimpleClient;
 import edu.cis.ibcs_app.R;
@@ -43,15 +44,17 @@ public class Actions {
         EditText amount = popupView.findViewById(R.id.modify_amountAvail);
         EditText type = popupView.findViewById(R.id.modify_type);
         Button b = popupView.findViewById(R.id.modify_button);
+        TextView error = popupView.findViewById(R.id.modify_errorMsg);
 
         builder.setView(popupView);
         final AlertDialog dialog = builder.create();
-        setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, mainActivity);
+        setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, "", error, mainActivity);
         dialog.show();
     }
 
-    public static void setupMenuItemPopUp(Button b, AlertDialog dialog, EditText name, EditText desc, EditText price, EditText amount, EditText type, MainActivity mainActivity){
+    public static void setupMenuItemPopUp(Button b, AlertDialog dialog, EditText name, EditText desc, EditText price, EditText amount, EditText type, String id, TextView error, MainActivity mainActivity){
         b.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Request req = new Request(CISConstants.ADD_MENU_ITEM);
@@ -60,13 +63,20 @@ public class Actions {
                 req.addParam(CISConstants.PRICE_PARAM, String.valueOf(price.getText()));
                 req.addParam(CISConstants.AMOUNT_AVAIL_PARAM, String.valueOf(amount.getText()));
                 req.addParam(CISConstants.ITEM_TYPE_PARAM, String.valueOf(type.getText()));
+                req.addParam(CISConstants.ITEM_ID_PARAM, id);
                 try {
-                    SimpleClient.makeRequest(CISConstants.HOST, req);
+                    String result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    Log.d("server", "Add menu item: " + result);
                     mainActivity.menuItemAdapter.update();
+                    dialog.dismiss();
+
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Log.d("error", e.getMessage());
+                    if (e.getMessage().equals(CISConstants.PARAM_MISSING_ERR)) {
+                        error.setText("please provide valid inputs");
+                        error.setVisibility(View.VISIBLE);
+                    }
                 }
-                dialog.dismiss();
             }
         });
     }
@@ -115,6 +125,38 @@ public class Actions {
     public static void loadUser(String userID, MainActivity mainActivity){
         CISUser currentUser = getUser(userID);
 
+        mainActivity.setContentView(R.layout.order_page);
+        Button cart = mainActivity.findViewById(R.id.order_cart);
+        TextView helloMsg = mainActivity.findViewById(R.id.order_helloMsg);
+        Button logoutB = mainActivity.findViewById(R.id.order_logout);
+
+        helloMsg.setText("Hello,\n" + currentUser.getName());
+
+        Orders_itemsAdapter adapter = new Orders_itemsAdapter(mainActivity);
+        RecyclerView recView = mainActivity.findViewById(R.id.order_items);
+        recView.setAdapter(adapter);
+        recView.setLayoutManager(new LinearLayoutManager(mainActivity));
+
+        logoutB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout(mainActivity);
+            }
+        });
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Request req = new Request(CISConstants.GET_CART);
+                req.addParam(CISConstants.USER_ID_PARAM, userID);
+                String result = null;
+                try {
+                    result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    Log.d("server", "Cart: " + result);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 

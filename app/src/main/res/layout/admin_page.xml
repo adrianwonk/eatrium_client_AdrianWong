@@ -52,7 +52,7 @@
         <Button
             android:id="@+id/admin_addItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:backgroundTint="@color/color_prim_light"
             android:text="Add menu item"
             android:textColor="@color/colorAccent" />

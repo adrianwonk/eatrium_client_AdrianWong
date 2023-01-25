@@ -2,16 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itemrow_cardview"
-        android:layout_width="400sp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="5dp"
+        android:background="#D6D6D6"
+        android:backgroundTint="@color/colorAccent"
         android:foregroundGravity="center"
         android:textAlignment="gravity"
+        app:cardBackgroundColor="@color/colorAccent"
+        app:cardCornerRadius="4sp"
+        app:cardPreventCornerOverlap="false"
         app:flow_horizontalAlign="start"
         app:flow_verticalAlign="baseline"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,9 +36,13 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="3sp"
+                app:layout_constraintEnd_toStartOf="@+id/itemrow_edit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/itemrow_name"
@@ -46,7 +58,7 @@
 
                 <TextView
                     android:id="@+id/itemrow_desc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="2sp"
@@ -81,9 +93,9 @@
 
             <Button
                 android:id="@+id/itemrow_edit"
-                android:layout_width="68dp"
-                android:layout_height="46dp"
-                android:layout_marginEnd="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/color_prim_dark"
                 android:fontFamily="sans-serif-medium"
                 android:text="buy"

@@ -29,20 +29,19 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
     ArrayList<MenuItem> mdata;
     MainActivity mainActivity;
 
+    CISUser currentUser;
+
     public Orders_itemsAdapter(MainActivity ma) {
         mainActivity = ma;
+        currentUser = ma.thisUser;
         mdata = new ArrayList<MenuItem>();
         update();
     }
 
     public void update(){ //puffs up the mdata
-
-        Snackbar snackbar = Snackbar.make(mainActivity.findViewById(android.R.id.content), "Processing", BaseTransientBottomBar.LENGTH_INDEFINITE);
-        snackbar.show();
         Orders_itemsAdapter.Orders_getMenuItems getMenuitems = new Orders_getMenuItems();
         getMenuitems.run();
         notifyDataSetChanged();
-        snackbar.dismiss();
     }
 
     public class Orders_getMenuItems implements Runnable{
@@ -97,9 +96,18 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result = "id: " + id + "\nname: " + item.name;
+                Request req = new Request("ADD_TO_CART");
+                req.addParam(CISConstants.ITEM_ID_PARAM, item.id);
+                req.addParam(CISConstants.USER_ID_PARAM, currentUser.userId);
+                String result = null;
+                try {
+                    result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    update();
+                } catch (IOException e) {
+                    Snackbar snackbar = Snackbar.make(mainActivity.findViewById(android.R.id.content), "out of stock!", BaseTransientBottomBar.LENGTH_SHORT);
+                    snackbar.show();
+                }
                 Log.d("server", "ADD TO CART: " + result);
-//                Request req = new Request(CISConstants.PLACE_ORDER);
             }
         });
     }

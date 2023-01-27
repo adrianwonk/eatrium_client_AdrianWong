@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="false"
+    android:layout_centerVertical="false">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cart_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:foregroundGravity="center"
+        android:minHeight="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/cart_checkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cart_layoutstack" />
+
+    <LinearLayout
+        android:id="@+id/cart_layoutstack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/cart_titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:fontFamily="sans-serif-black"
+            android:paddingTop="30sp"
+            android:text="CART"
+            android:textAlignment="center"
+            android:textColor="@color/color_prim_light"
+            android:textSize="70sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/cart_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="My Balance: "
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/cart_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Cart Total:  "
+                android:textSize="17dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cart_checkout"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/color_prim_light"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:maxHeight="100sp"
+        android:minHeight="48sp"
+        android:paddingTop="8sp"
+        android:paddingBottom="12sp"
+        android:shadowColor="@color/colorAccent"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="0"
+        android:text="Checkout Cart"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textColorHighlight="@color/colorAccent"
+        android:textColorHint="@color/colorAccent"
+        android:textColorLink="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/cart_exit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cart_items" />
+
+    <Button
+        android:id="@+id/cart_exit"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/color_prim_dark"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:maxHeight="100sp"
+        android:minHeight="48sp"
+        android:paddingTop="8sp"
+        android:paddingBottom="12sp"
+        android:shadowColor="@color/colorAccent"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="0"
+        android:text="exit"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textColorHighlight="@color/colorAccent"
+        android:textColorHint="@color/colorAccent"
+        android:textColorLink="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cart_checkout"
+        app:layout_constraintVertical_bias="0.13999999" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

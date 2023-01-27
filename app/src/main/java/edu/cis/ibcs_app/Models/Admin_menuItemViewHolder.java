@@ -16,6 +16,7 @@ public class Admin_menuItemViewHolder extends RecyclerView.ViewHolder {
     public TextView price;
     public TextView amountAvail;
     public Button button;
+    public View view;
     public Admin_menuItemViewHolder(@NonNull View itemView) {
         super(itemView);
         name = itemView.findViewById(R.id.itemrow_name);
@@ -23,5 +24,6 @@ public class Admin_menuItemViewHolder extends RecyclerView.ViewHolder {
         price = itemView.findViewById(R.id.itemrow_price);
         amountAvail = itemView.findViewById(R.id.itemrow_amountAvail);
         button = itemView.findViewById(R.id.itemrow_edit);
+        view = itemView;
     }
 }

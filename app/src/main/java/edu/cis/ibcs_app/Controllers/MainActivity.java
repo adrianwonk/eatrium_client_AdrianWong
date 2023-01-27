@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     //important elements
     EditText userIdInput;
 
-    CISUser thisUser;
+    public CISUser thisUser;
 
     public Admin_menuItemAdapter menuItemAdapter;
 

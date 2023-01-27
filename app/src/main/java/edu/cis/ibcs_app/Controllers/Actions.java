@@ -21,7 +21,9 @@ import java.util.ArrayList;
 
 import edu.cis.ibcs_app.Models.Admin_adapter;
 import edu.cis.ibcs_app.Models.Admin_menuItemAdapter;
+import edu.cis.ibcs_app.Models.Admin_menuItemViewHolder;
 import edu.cis.ibcs_app.Models.CISUser;
+import edu.cis.ibcs_app.Models.Cart_menuItemAdapter;
 import edu.cis.ibcs_app.Models.MenuItem;
 import edu.cis.ibcs_app.Models.Order;
 import edu.cis.ibcs_app.Models.Orders_itemsAdapter;
@@ -34,7 +36,6 @@ public class Actions {
 
     public static void menuItemPopup(MainActivity mainActivity){
         AlertDialog.Builder builder;
-        LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
         builder = new AlertDialog.Builder(mainActivity);
         View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.menu_item_modify, null);
 
@@ -82,7 +83,77 @@ public class Actions {
     }
 //  -- POPUP
 
+    public static void cartPopup(MainActivity mainActivity , Orders_itemsAdapter ordersAdapter){
 
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(mainActivity);
+        View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.cart, null);
+
+        TextView myBalance = popupView.findViewById(R.id.cart_money);
+        TextView cartTotal = popupView.findViewById(R.id.cart_total);
+
+        Button checkout = popupView.findViewById(R.id.cart_checkout);
+        Button exit = popupView.findViewById(R.id.cart_exit);
+
+        Cart_menuItemAdapter adapter = new Cart_menuItemAdapter(mainActivity, cartTotal, checkout);
+        RecyclerView recyclerView = popupView.findViewById(R.id.cart_items);
+        LinearLayoutManager llm = new LinearLayoutManager(popupView.getContext());
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
+
+        myBalance.setText("My Balance: " + mainActivity.thisUser.getMoney());
+
+        Request req = new Request("GET_CART_TOTAL");
+        req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.userId);
+
+        Double total;
+
+        try {
+            String result = SimpleClient.makeRequest(CISConstants.HOST, req);
+            total = Double.parseDouble(result);
+            cartTotal.setText("Cart Total: " + result);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (total > mainActivity.thisUser.getMoney() || total == 0){
+            checkout.setVisibility(View.INVISIBLE);
+        }
+
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Request req = new Request("CHECKOUT_CART");
+                req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.getUserId());
+                try{
+                    String result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    Log.d("server", "CHECKOUT_CART: " + result);
+                    adapter.update();
+                    myBalance.setText("My Balance: " + mainActivity.thisUser.getMoney());
+                    cartTotal.setText("Cart Total: 0.0");
+                    checkout.setVisibility(View.INVISIBLE);
+                } catch (IOException e) {
+                    Log.d("server", e.getMessage());
+                }
+            }
+        });
+
+
+
+        builder.setView(popupView);
+        final AlertDialog dialog = builder.create();
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ordersAdapter.update();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
 
 
     public static void loadAdmin(String userID, MainActivity mainActivity){
@@ -123,14 +194,14 @@ public class Actions {
     }
 
     public static void loadUser(String userID, MainActivity mainActivity){
-        CISUser currentUser = getUser(userID);
+        mainActivity.thisUser = getUser(userID);
 
         mainActivity.setContentView(R.layout.order_page);
         Button cart = mainActivity.findViewById(R.id.order_cart);
         TextView helloMsg = mainActivity.findViewById(R.id.order_helloMsg);
         Button logoutB = mainActivity.findViewById(R.id.order_logout);
 
-        helloMsg.setText("Hello,\n" + currentUser.getName());
+        helloMsg.setText("Hello,\n" + mainActivity.thisUser.getName());
 
         Orders_itemsAdapter adapter = new Orders_itemsAdapter(mainActivity);
         RecyclerView recView = mainActivity.findViewById(R.id.order_items);
@@ -146,15 +217,7 @@ public class Actions {
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Request req = new Request(CISConstants.GET_CART);
-                req.addParam(CISConstants.USER_ID_PARAM, userID);
-                String result = null;
-                try {
-                    result = SimpleClient.makeRequest(CISConstants.HOST, req);
-                    Log.d("server", "Cart: " + result);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                cartPopup(mainActivity, adapter);
             }
         });
 
@@ -196,7 +259,7 @@ public class Actions {
         String userId = "";
         String name;
         String yearLevel;
-        ArrayList<Order> orders = new ArrayList<>();
+        ArrayList<Order> orders = new ArrayList<Order>();
         double money;
 
         String[] res = result.split("orders= " );
@@ -211,19 +274,19 @@ public class Actions {
             money = Double.parseDouble(s.substring(0, s.length()-1));
         }
         else {
-            String[] ordersAndMoney = res[1].split("}"); // <--- money is last in the array
+            String[] ordersAndMoney = res[1].split("Order"); // <--- money is last in the array
 
-            String[] ordersOnly = new String[ordersAndMoney.length-1];
-            System.arraycopy(ordersAndMoney, 0, ordersOnly, 0, ordersOnly.length);
+            String[] lastOrderAndMoney = ordersAndMoney[ordersAndMoney.length-1].split(", money="); // last order on 0, money} on 1
+
+            String[] ordersOnly = new String[ordersAndMoney.length-2]; // rest of the orders (can use decodeorder)
+            System.arraycopy(ordersAndMoney, 1, ordersOnly, 0, ordersOnly.length);
 
             for (String value : ordersOnly){
                 orders.add(decodeOrder(value));
             }
 
-            String moneyStr = ordersAndMoney[ordersAndMoney.length-1];
-            moneyStr = moneyStr.split(", money=")[1];
-
-            money = Double.parseDouble(moneyStr);
+            orders.add(decodeOrder(lastOrderAndMoney[0]));
+            money = Double.parseDouble(lastOrderAndMoney[1].substring(0, lastOrderAndMoney[1].length()-1));
         }
 
 

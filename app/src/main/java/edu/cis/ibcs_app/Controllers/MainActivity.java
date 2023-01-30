@@ -30,28 +30,23 @@ import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
 public class MainActivity extends AppCompatActivity {
-
     //important elements
     EditText userIdInput;
-
     public CISUser thisUser;
-
     public Admin_menuItemAdapter menuItemAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        //This is not great, for extra credit you can fix this so that network calls happen on a different thread
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        // This is not great, for extra credit you can fix this so that network
+        // calls happen on a different thread
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+            .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        userIdInput = (EditText) findViewById(R.id.user_id_input);
-
+        userIdInput = findViewById(R.id.user_id_input);
     }
 
     public void ping(View v) {
@@ -72,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
             String userID = String.valueOf(userIdInput.getText());
             Log.d("server", "logIn: "+ userID);
 
-            if (userID.isEmpty() || userID.isBlank()) Snackbar.make(findViewById(R.id.container), "Please provide a valid input", BaseTransientBottomBar.LENGTH_SHORT).show();
+            if (userID.isEmpty() || userID.isBlank()) {
+                Snackbar.make(findViewById
+                    (R.id.container), "Please provide a valid input"
+                    , BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
 
             else {
                 Log.d("server", ""+Actions.getUserType(userID));
@@ -84,13 +83,17 @@ public class MainActivity extends AppCompatActivity {
                         Actions.loadUser(userID, this);
                         break;
                     case 'N':
-                        Snackbar.make(findViewById(R.id.container), "User not found", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.container)
+                            , "User not found"
+                            , BaseTransientBottomBar.LENGTH_SHORT).show();
                         break;
                     case 'R':
-                        Snackbar.make(findViewById(R.id.container), "Wait until your account has been approved!", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.container)
+                            , "Wait until your account has been " +
+                              "approved!"
+                            , BaseTransientBottomBar.LENGTH_SHORT).show();
                 }
             }
-
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -106,27 +109,28 @@ public class MainActivity extends AppCompatActivity {
     Button registerClose;
     TextView registerUsrMsg;
     Register_waitForThreads register_waitForThreads;
-
     public void createAcc(View view){
         AlertDialog.Builder builder;
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-
+        LayoutInflater inflater = (LayoutInflater) getSystemService
+            (LAYOUT_INFLATER_SERVICE);
         builder = new AlertDialog.Builder((MainActivity) this);
         View popupView = inflater.inflate(R.layout.popup, null);
 
-        registerNameInput = (EditText) popupView.findViewById(R.id.register_name);
+        registerNameInput = (EditText) popupView.findViewById
+            (R.id.register_name);
         registerIdInput = (EditText) popupView.findViewById(R.id.register_id);
-        registerYrLevelInput = (EditText) popupView.findViewById(R.id.register_yearlevel);
+        registerYrLevelInput = (EditText) popupView.findViewById
+            (R.id.register_yearlevel);
         registerAcc = (Button) popupView.findViewById(R.id.register_createAcc);
         registerClose = (Button) popupView.findViewById(R.id.register_cancel);
-        registerUsrMsg = (TextView) popupView.findViewById(R.id.register_userMsg);
+        registerUsrMsg = (TextView) popupView.findViewById
+            (R.id.register_userMsg);
 
         builder.setView(popupView);
         dialog = builder.create();
         registerAcc.setOnClickListener(new View.OnClickListener() {
-
-//            Run UI shit, then on a separate thread, wait for server to respond(which is running on ANOTHER thread).
+//            Run UI stuff, then on a separate thread, wait for server to
+//            respond(which is running on ANOTHER thread).
 //            After server responds, act accordingly on the separate thread.
             @Override
             public void onClick(View v) {
@@ -139,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(register_waitForThreads).start();
             }
         });
-
         registerClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,22 +150,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.show();
-
     }
 
     class Register_waitForThreads implements Runnable{
-
         public Register_waitForThreads() {
         }
         @Override
         public void run() {
-            Server_makeRequest server_makeRequest = new Server_makeRequest(""+ registerIdInput.getText(), ""+ registerNameInput.getText(), ""+ registerYrLevelInput.getText());
+            Server_makeRequest server_makeRequest = new Server_makeRequest
+                (""+ registerIdInput.getText(), ""+ registerNameInput
+                .getText(), ""+ registerYrLevelInput.getText());
 
-            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-            ScheduledFuture future = scheduledExecutorService.schedule( server_makeRequest , 0, TimeUnit.SECONDS );
+            ScheduledExecutorService scheduledExecutorService = Executors
+                .newSingleThreadScheduledExecutor();
+            ScheduledFuture future = scheduledExecutorService.schedule(
+                server_makeRequest , 0, TimeUnit.SECONDS);
 
             while (!future.isDone()){
-
             }
 
             if (server_makeRequest.makeRequestOut == -1){
@@ -176,7 +180,10 @@ public class MainActivity extends AppCompatActivity {
                 registerAcc.setClickable(true);
             }
             else{
-                Snackbar.make(findViewById(android.R.id.content), "account requested with ID: " + registerIdInput.getText(), BaseTransientBottomBar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content)
+                    , "account requested with ID: "
+                    + registerIdInput.getText()
+                    , BaseTransientBottomBar.LENGTH_LONG).show();
                 dialog.dismiss();
             }
             Log.d("server", "finished running wait for threads");
@@ -216,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("server", "ERR: "+ e.getMessage());
                 makeRequestOut = -2;
             }
-            Log.d("server", "finished running make request with out: " + makeRequestOut);
+            Log.d("server", "finished running make request with out: "
+                + makeRequestOut);
         }
     }
 

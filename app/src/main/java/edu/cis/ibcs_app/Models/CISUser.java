@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class CISUser {
     public String userId = "";
     public String name;
-
     public String yearLevel;
     public ArrayList<Order> orders;
     public double money;
 
-    public CISUser(String userId, String name, String yearLevel, ArrayList<Order> orders, double money) {
+    public CISUser(String userId, String name, String yearLevel
+    , ArrayList<Order> orders, double money) {
         this.userId = userId;
         this.name = name;
         this.yearLevel = yearLevel;
@@ -60,16 +60,15 @@ public class CISUser {
 
     @Override
     public String toString() {
-
         String result = "CISUser{userID='" + userId + "', ";
         result += "name='" + name + "', ";
         result += "yearLevel='" + yearLevel + "', ";
         result += "orders= ";
+
         // ADD ORDERS INTO RESULT
         for (Order value : orders){
             result += value + ", ";
         }
-
         result += "money=" + money + "}";
         return result;
     }

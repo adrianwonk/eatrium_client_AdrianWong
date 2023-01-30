@@ -21,16 +21,15 @@ import edu.cis.ibcs_app.Controllers.MainActivity;
 import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
-public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemViewHolder> {
-
+public class Cart_menuItemAdapter
+extends RecyclerView.Adapter<Admin_menuItemViewHolder> {
     ArrayList<Order> mdata;
     MainActivity mainActivity;
-
     TextView cartTotal;
-
     Button checkoutB;
 
-    public Cart_menuItemAdapter(MainActivity ma, TextView cartTotal, Button checkoutB) {
+    public Cart_menuItemAdapter(MainActivity ma, TextView cartTotal,
+    Button checkoutB) {
         this.cartTotal = cartTotal;
         this.checkoutB = checkoutB;
         mainActivity = ma;
@@ -40,17 +39,18 @@ public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVie
 
     public void update(){ //puffs up the mdata
         mdata.clear();
-        Request req = new Request(CISConstants.GET_USER);
-        req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.getUserId());
-        String result = null;
 
+        Request req = new Request(CISConstants.GET_USER);
+        req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser
+            .getUserId());
+        String result = null;
         try {
             result = SimpleClient.makeRequest(CISConstants.HOST, req);
             mainActivity.thisUser = Actions.decodeUser(result);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         Log.d("server", "THIS_USER: " + result);
 
         for (Order o : mainActivity.thisUser.getOrders()){
@@ -61,21 +61,24 @@ public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVie
 
     @NonNull
     @Override
-    public Admin_menuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflatedView = LayoutInflater.from(mainActivity).inflate(R.layout.menu_item_row, parent, false);
-        Admin_menuItemViewHolder vh = new Admin_menuItemViewHolder(inflatedView);
+    public Admin_menuItemViewHolder onCreateViewHolder
+    (@NonNull ViewGroup parent, int viewType) {
+        View inflatedView = LayoutInflater.from(mainActivity).
+            inflate(R.layout.menu_item_row, parent, false);
+        Admin_menuItemViewHolder vh =
+            new Admin_menuItemViewHolder(inflatedView);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Admin_menuItemViewHolder holder, int position) {
+    public void onBindViewHolder
+    (@NonNull Admin_menuItemViewHolder holder, int position) {
         Order o = mdata.get(position);
         final int pos = position;
+
         Request req = new Request(CISConstants.GET_ITEM);
         req.addParam(CISConstants.ITEM_ID_PARAM, o.getItemID());
-
         MenuItem item = null;
-
         try{
             String result = SimpleClient.makeRequest(CISConstants.HOST, req);
             Log.d("server", "GET_ITEM: " + result);
@@ -85,7 +88,8 @@ public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVie
             else {
                 Log.d("server", "ERROR: " + result);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -95,36 +99,40 @@ public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVie
             holder.amountAvail.setText("" + item.amountAvailable + " left");
             holder.price.setText("Price: $" + item.price);
             holder.button.setText("REMOVE");
-
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Request req = new Request("REMOVE_FROM_CART");
-                    req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.userId);
+                    req.addParam(CISConstants.USER_ID_PARAM,
+                        mainActivity.thisUser.userId);
                     req.addParam(CISConstants.ORDER_ID_PARAM, o.getOrderID());
-
                     try{
-                        String result = SimpleClient.makeRequest(CISConstants.HOST, req);
-                        Log.d("server", "REMOVE_FROM_CART: " + result);
+                        String result = SimpleClient.makeRequest
+                            (CISConstants.HOST, req);
+                        Log.d("server", "REMOVE_FROM_CART: "
+                            + result);
+
                         if (result.equals(CISConstants.SUCCESS)){
                             mdata.remove(pos);
                             notifyDataSetChanged();
 
                             // to update cart UI variables --
                             Request req2 = new Request("GET_CART_TOTAL");
-                            req2.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.userId);
+                            req2.addParam(CISConstants.USER_ID_PARAM,
+                                mainActivity.thisUser.userId);
 
                             Double total;
-
                             try {
-                                String result2 = SimpleClient.makeRequest(CISConstants.HOST, req2);
+                                String result2 = SimpleClient.makeRequest
+                                    (CISConstants.HOST, req2);
                                 total = Double.parseDouble(result2);
                                 cartTotal.setText("Cart Total: " + result2);
-                            } catch (IOException e) {
+                            }
+                            catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-
-                            if (total <= mainActivity.thisUser.getMoney() && total != 0){
+                            if (total <= mainActivity.thisUser.getMoney()
+                                && total != 0) {
                                 checkoutB.setVisibility(View.VISIBLE);
                             }
                             else {
@@ -133,7 +141,8 @@ public class Cart_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVie
                             // --
                         }
 
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }

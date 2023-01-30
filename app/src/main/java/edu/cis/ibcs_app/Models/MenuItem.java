@@ -11,8 +11,8 @@ public class MenuItem {
     public int amountAvailable;
     public String type;
 
-
-    public MenuItem(String name, String description, double price, String id, int amountAvailable, String type) {
+    public MenuItem(String name, String description, double price, String id
+    , int amountAvailable, String type) {
         this.name = name;
         this.description = description;
         this.price = price;

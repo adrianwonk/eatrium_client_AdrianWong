@@ -24,11 +24,11 @@ import edu.cis.ibcs_app.Controllers.MainActivity;
 import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
-public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemViewHolder> {
+public class Orders_itemsAdapter extends
+RecyclerView.Adapter<Admin_menuItemViewHolder> {
 
     ArrayList<MenuItem> mdata;
     MainActivity mainActivity;
-
     CISUser currentUser;
 
     public Orders_itemsAdapter(MainActivity ma) {
@@ -38,14 +38,15 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
         update();
     }
 
-    public void update(){ //puffs up the mdata
-        Orders_itemsAdapter.Orders_getMenuItems getMenuitems = new Orders_getMenuItems();
+    public void update() { //puffs up the mdata
+        Orders_itemsAdapter.Orders_getMenuItems getMenuitems =
+            new Orders_getMenuItems();
+
         getMenuitems.run();
         notifyDataSetChanged();
     }
 
-    public class Orders_getMenuItems implements Runnable{
-
+    public class Orders_getMenuItems implements Runnable {
         @Override
         public void run() {
             mdata.clear();
@@ -54,7 +55,8 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
 
             try {
                 result = SimpleClient.makeRequest(CISConstants.HOST, req);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -75,22 +77,26 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
 
     @NonNull
     @Override
-    public Admin_menuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflatedView = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item_row, parent, false);
-        Admin_menuItemViewHolder vh = new Admin_menuItemViewHolder(inflatedView);
+    public Admin_menuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent
+    , int viewType) {
+        View inflatedView = LayoutInflater.from(parent.getContext()).inflate
+            (R.layout.menu_item_row, parent, false);
+
+        Admin_menuItemViewHolder vh =
+            new Admin_menuItemViewHolder(inflatedView);
+
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Admin_menuItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Admin_menuItemViewHolder holder,
+    int position) {
         MenuItem item = mdata.get(position);
         holder.amountAvail.setText("" + item.amountAvailable + " left");
         holder.desc.setText(item.description);
         holder.name.setText(item.name);
         holder.price.setText("Price: $" + item.price);
         holder.button.setText("ADD TO CART");
-
-        String id = item.id;
 
 //        TODO
         holder.button.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +109,11 @@ public class Orders_itemsAdapter extends RecyclerView.Adapter<Admin_menuItemView
                 try {
                     result = SimpleClient.makeRequest(CISConstants.HOST, req);
                     update();
-                } catch (IOException e) {
-                    Snackbar snackbar = Snackbar.make(mainActivity.findViewById(android.R.id.content), "out of stock!", BaseTransientBottomBar.LENGTH_SHORT);
+                }
+                catch (IOException e) {
+                    Snackbar snackbar = Snackbar.make(mainActivity.findViewById
+                        (android.R.id.content), "out of stock!",
+                        BaseTransientBottomBar.LENGTH_SHORT);
                     snackbar.show();
                 }
                 Log.d("server", "ADD TO CART: " + result);

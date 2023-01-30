@@ -33,11 +33,11 @@ import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
 public class Actions {
-
     public static void menuItemPopup(MainActivity mainActivity){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(mainActivity);
-        View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.menu_item_modify, null);
+        View popupView = LayoutInflater.from(mainActivity).inflate
+            (R.layout.menu_item_modify, null);
 
         EditText name = popupView.findViewById(R.id.modify_name);
         EditText desc = popupView.findViewById(R.id.modify_desc);
@@ -49,29 +49,38 @@ public class Actions {
 
         builder.setView(popupView);
         final AlertDialog dialog = builder.create();
-        setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, "", error, mainActivity);
+        setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, "",
+            error, mainActivity);
         dialog.show();
     }
 
-    public static void setupMenuItemPopUp(Button b, AlertDialog dialog, EditText name, EditText desc, EditText price, EditText amount, EditText type, String id, TextView error, MainActivity mainActivity){
+    public static void setupMenuItemPopUp(Button b, AlertDialog dialog,
+    EditText name, EditText desc, EditText price, EditText amount,
+    EditText type, String id, TextView error, MainActivity mainActivity){
         b.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Request req = new Request(CISConstants.ADD_MENU_ITEM);
-                req.addParam(CISConstants.ITEM_NAME_PARAM, String.valueOf(name.getText()));
-                req.addParam(CISConstants.DESC_PARAM, String.valueOf(desc.getText()));
-                req.addParam(CISConstants.PRICE_PARAM, String.valueOf(price.getText()));
-                req.addParam(CISConstants.AMOUNT_AVAIL_PARAM, String.valueOf(amount.getText()));
-                req.addParam(CISConstants.ITEM_TYPE_PARAM, String.valueOf(type.getText()));
+                req.addParam(CISConstants.ITEM_NAME_PARAM, String.valueOf
+                    (name.getText()));
+                req.addParam(CISConstants.DESC_PARAM, String.valueOf
+                    (desc.getText()));
+                req.addParam(CISConstants.PRICE_PARAM, String.valueOf
+                    (price.getText()));
+                req.addParam(CISConstants.AMOUNT_AVAIL_PARAM, String.valueOf
+                    (amount.getText()));
+                req.addParam(CISConstants.ITEM_TYPE_PARAM, String.valueOf
+                    (type.getText()));
                 req.addParam(CISConstants.ITEM_ID_PARAM, id);
                 try {
-                    String result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    String result = SimpleClient.makeRequest
+                        (CISConstants.HOST, req);
                     Log.d("server", "Add menu item: " + result);
                     mainActivity.menuItemAdapter.update();
                     dialog.dismiss();
 
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     Log.d("error", e.getMessage());
                     if (e.getMessage().equals(CISConstants.PARAM_MISSING_ERR)) {
                         error.setText("please provide valid inputs");
@@ -83,21 +92,23 @@ public class Actions {
     }
 //  -- POPUP
 
-    public static void cartPopup(MainActivity mainActivity , Orders_itemsAdapter ordersAdapter){
-
+    public static void cartPopup(MainActivity mainActivity,
+    Orders_itemsAdapter ordersAdapter){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(mainActivity);
-        View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.cart, null);
+        View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.cart
+        , null);
 
         TextView myBalance = popupView.findViewById(R.id.cart_money);
         TextView cartTotal = popupView.findViewById(R.id.cart_total);
-
         Button checkout = popupView.findViewById(R.id.cart_checkout);
         Button exit = popupView.findViewById(R.id.cart_exit);
 
-        Cart_menuItemAdapter adapter = new Cart_menuItemAdapter(mainActivity, cartTotal, checkout);
+        Cart_menuItemAdapter adapter = new Cart_menuItemAdapter(mainActivity
+            , cartTotal, checkout);
         RecyclerView recyclerView = popupView.findViewById(R.id.cart_items);
-        LinearLayoutManager llm = new LinearLayoutManager(popupView.getContext());
+        LinearLayoutManager llm = new LinearLayoutManager(
+        popupView.getContext());
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
@@ -105,43 +116,44 @@ public class Actions {
 
         Request req = new Request("GET_CART_TOTAL");
         req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.userId);
-
         Double total;
-
         try {
             String result = SimpleClient.makeRequest(CISConstants.HOST, req);
             total = Double.parseDouble(result);
             cartTotal.setText("Cart Total: " + result);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         if (total > mainActivity.thisUser.getMoney() || total == 0){
             checkout.setVisibility(View.INVISIBLE);
         }
+
+        builder.setView(popupView);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Request req = new Request("CHECKOUT_CART");
-                req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser.getUserId());
+                req.addParam(CISConstants.USER_ID_PARAM, mainActivity.thisUser
+                    .getUserId());
                 try{
-                    String result = SimpleClient.makeRequest(CISConstants.HOST, req);
+                    String result = SimpleClient.makeRequest(CISConstants.HOST
+                        , req);
                     Log.d("server", "CHECKOUT_CART: " + result);
                     adapter.update();
-                    myBalance.setText("My Balance: " + mainActivity.thisUser.getMoney());
+                    myBalance.setText("My Balance: " + mainActivity.thisUser
+                        .getMoney());
                     cartTotal.setText("Cart Total: 0.0");
                     checkout.setVisibility(View.INVISIBLE);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     Log.d("server", e.getMessage());
                 }
             }
         });
-
-
-
-        builder.setView(popupView);
-        final AlertDialog dialog = builder.create();
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,15 +162,14 @@ public class Actions {
                 dialog.dismiss();
             }
         });
-
-        dialog.show();
-
     }
 
 
     public static void loadAdmin(String userID, MainActivity mainActivity){
         if (getUserType(userID) != 'A'){
-            Snackbar.make(mainActivity.findViewById(R.id.container), "Please provide valid admin ID", BaseTransientBottomBar.LENGTH_SHORT).show();
+            Snackbar.make(mainActivity.findViewById(R.id.container)
+                , "Please provide valid admin ID"
+                ,BaseTransientBottomBar.LENGTH_SHORT).show();
         }
         else {
             mainActivity.setContentView(R.layout.admin_page);
@@ -180,14 +191,18 @@ public class Actions {
             });
 
             Admin_adapter adapter = new Admin_adapter(mainActivity);
-            RecyclerView recyclerView = mainActivity.findViewById(R.id.admin_creationRequests);
+            RecyclerView recyclerView = mainActivity.findViewById(
+                R.id.admin_creationRequests);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 
-            mainActivity.menuItemAdapter = new Admin_menuItemAdapter(mainActivity);
-            RecyclerView recyclerView1 = mainActivity.findViewById(R.id.admin_menuItemsManager);
+            mainActivity.menuItemAdapter = new Admin_menuItemAdapter(
+                mainActivity);
+            RecyclerView recyclerView1 = mainActivity.findViewById(
+                R.id.admin_menuItemsManager);
             recyclerView1.setAdapter(mainActivity.menuItemAdapter);
-            recyclerView1.setLayoutManager(new LinearLayoutManager(mainActivity));
+            recyclerView1.setLayoutManager(
+                new LinearLayoutManager(mainActivity));
 
 
         }
@@ -274,11 +289,16 @@ public class Actions {
             money = Double.parseDouble(s.substring(0, s.length()-1));
         }
         else {
-            String[] ordersAndMoney = res[1].split("Order"); // <--- money is last in the array
+            String[] ordersAndMoney =
+                res[1].split("Order"); // <--- money is last in the array
 
-            String[] lastOrderAndMoney = ordersAndMoney[ordersAndMoney.length-1].split(", money="); // last order on 0, money} on 1
+            String[] lastOrderAndMoney = ordersAndMoney[
+                ordersAndMoney.length-1].split(
+         ", money="); // 'last order' on 0, 'money}' on 1
 
-            String[] ordersOnly = new String[ordersAndMoney.length-2]; // rest of the orders (can use decodeorder)
+            String[] ordersOnly = new String[
+                ordersAndMoney.length-2]; // rest of the orders
+                                          // (can use decodeorder)
             System.arraycopy(ordersAndMoney, 1, ordersOnly, 0, ordersOnly.length);
 
             for (String value : ordersOnly){
@@ -288,7 +308,6 @@ public class Actions {
             orders.add(decodeOrder(lastOrderAndMoney[0]));
             money = Double.parseDouble(lastOrderAndMoney[1].substring(0, lastOrderAndMoney[1].length()-1));
         }
-
 
         return new CISUser(userId, name, yearLevel, orders, money);
     }
@@ -301,17 +320,19 @@ public class Actions {
 
         try {
             return new Order(itemID, type, orderID);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static MenuItem decodeMenuItem(String s){
+    public static MenuItem decodeMenuItem(String s) {
         String[] elements = s.split(", ");
-        for (int i = 0; i < elements.length; i++){
+        for (int i = 0; i < elements.length; i++) {
             String element = elements[i].split("=")[1];
             String elementCleaned = "";
+
             for (var value : element.toCharArray()){
                 if (!(value == '\'' || value == '}' || value == '{')){
                     elementCleaned += value;
@@ -329,7 +350,4 @@ public class Actions {
 
         return new MenuItem(name, desc, price, id, amountAvail, type);
     }
-
-
-
 }

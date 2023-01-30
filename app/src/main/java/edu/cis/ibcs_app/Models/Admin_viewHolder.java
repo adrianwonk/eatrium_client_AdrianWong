@@ -25,7 +25,5 @@ public class Admin_viewHolder extends RecyclerView.ViewHolder {
         TVYearLevel = (TextView) itemView.findViewById(R.id.request_yearLevel);
         bAccept = (Button) itemView.findViewById(R.id.request_accept);
         bDeny = (Button) itemView.findViewById(R.id.request_deny);
-
-
     }
 }

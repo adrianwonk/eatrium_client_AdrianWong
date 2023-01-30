@@ -19,12 +19,11 @@ import edu.cis.ibcs_app.R;
 import edu.cis.ibcs_app.Utils.CISConstants;
 
 public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
-
     ArrayList<CISUser> mdata;
     MainActivity mainActivity;
 
     public boolean userInData(String id){
-        for (CISUser value : mdata){
+        for (CISUser value : mdata) {
             if (value.getUserId().equals(id)) return true;
         }
         return false;
@@ -37,17 +36,18 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
     }
 
     public void update(){ //puffs up the mdata
-
-        Snackbar snackbar = Snackbar.make(mainActivity.findViewById(android.R.id.content), "Processing", BaseTransientBottomBar.LENGTH_INDEFINITE);
+        Snackbar snackbar = Snackbar.make(mainActivity.findViewById(
+            android.R.id.content), "Processing", BaseTransientBottomBar
+            .LENGTH_INDEFINITE);
         snackbar.show();
-        Admin_getRegisterRequests getRegisterRequests = new Admin_getRegisterRequests();
+        Admin_getRegisterRequests getRegisterRequests =
+            new Admin_getRegisterRequests();
         getRegisterRequests.run();
         notifyDataSetChanged();
         snackbar.dismiss();
     }
 
-    class Admin_getRegisterRequests implements  Runnable{
-
+    class Admin_getRegisterRequests implements Runnable{
         public Admin_getRegisterRequests() {}
         @Override
         public void run() {
@@ -71,23 +71,25 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
                         // remove data from mdata that aren't in resultArr
                         ArrayList<String> userIDS = new ArrayList<>();
                         for (String value : resultArr){
-                            userIDS.add(Actions.decodeUser(value).getUserId()); // gets userIDs in ACC REQ arraylist from server
+                            userIDS.add(Actions.decodeUser(value)
+                                .getUserId()); // gets userIDs in ACC REQ'S
+                                               // from the server
                         }
 
-                        for (int i = 0; i < mdata.size(); i++){ // loop through CISusers in mdata and delete those that aren't in userIDS
+                     // loop through CISusers in mdata and delete those that
+                     // aren't in userIDS
+                        for (int i = 0; i < mdata.size(); i++) {
                             CISUser value = mdata.get(i);
-                            if (!userIDS.contains(value.getUserId())){
+                            if (!userIDS.contains(value.getUserId())) {
                                 mdata.remove(value);
                             }
                         }
                 }
-
                 else {
                     mdata.clear();
                 }
-
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
@@ -96,14 +98,17 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
 
     @NonNull
     @Override
-    public Admin_viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflatedView = LayoutInflater.from(parent.getContext()).inflate(R.layout.acc_request_view, parent, false);
+    public Admin_viewHolder onCreateViewHolder(@NonNull ViewGroup parent
+    , int viewType) {
+        View inflatedView = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.acc_request_view, parent, false);
         Admin_viewHolder vh = new Admin_viewHolder(inflatedView);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Admin_viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Admin_viewHolder holder
+    , int position) {
         CISUser u = mdata.get(position);
         holder.TVName.setText("name: " + u.name);
         holder.TVId.setText("ID: " + u.userId);
@@ -113,7 +118,8 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
             @Override
             public void onClick(View v) {
                 holder.overlay.setVisibility(View.VISIBLE);
-                Register_handleReg register_handleReg = new Register_handleReg(true, u.userId);
+                Register_handleReg register_handleReg = new Register_handleReg(
+            true, u.userId);
                 register_handleReg.run();
                 update();
             }
@@ -123,7 +129,8 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
             @Override
             public void onClick(View v) {
                 holder.overlay.setVisibility(View.VISIBLE);
-                Register_handleReg register_handleReg = new Register_handleReg(false, u.userId);
+                Register_handleReg register_handleReg = new Register_handleReg(
+            false, u.userId);
                 register_handleReg.run();
                 update();
             }
@@ -136,7 +143,6 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
     }
 
     class Register_handleReg implements Runnable{
-
         String acceptS;
         boolean accept;
         String userID;
@@ -150,7 +156,6 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
             else{
                 acceptS =  "n";
             }
-
         }
 
         @Override
@@ -159,7 +164,6 @@ public class Admin_adapter extends RecyclerView.Adapter<Admin_viewHolder> {
                 Request req = new Request("HANDLE_REGISTER_REQUEST");
                 req.addParam(CISConstants.USER_ID_PARAM, userID);
                 req.addParam("ACCEPT", acceptS);
-
                 String result = SimpleClient.makeRequest(CISConstants.HOST, req);
                 Log.d("server", "handleRegister: " + result);
             }

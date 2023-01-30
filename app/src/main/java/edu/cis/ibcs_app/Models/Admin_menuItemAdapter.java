@@ -89,7 +89,6 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
 
     @Override
     public void onBindViewHolder(@NonNull Admin_menuItemViewHolder holder, int position) {
-
         MenuItem item = mdata.get(position);
         holder.amountAvail.setText("" + item.amountAvailable + " left");
         holder.desc.setText(item.description);
@@ -97,23 +96,23 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
         holder.price.setText("Price: $" + item.price);
         holder.button.setText("EDIT");
 
-        String id = item.id;
-
-//        TODO
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 //              POPUP --
                 AlertDialog.Builder builder;
-                LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) mainActivity
+                    .getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
                 builder = new AlertDialog.Builder(mainActivity);
-                View popupView = LayoutInflater.from(mainActivity).inflate(R.layout.menu_item_modify, null);
+                View popupView = LayoutInflater.from(mainActivity)
+                    .inflate(R.layout.menu_item_modify, null);
 
                 EditText name = popupView.findViewById(R.id.modify_name);
                 EditText desc = popupView.findViewById(R.id.modify_desc);
                 EditText price = popupView.findViewById(R.id.modify_price);
-                EditText amount = popupView.findViewById(R.id.modify_amountAvail);
+                EditText amount = popupView.findViewById(
+                    R.id.modify_amountAvail);
                 EditText type = popupView.findViewById(R.id.modify_type);
                 TextView id = popupView.findViewById(R.id.modify_idview);
                 Button b = popupView.findViewById(R.id.modify_button);
@@ -130,7 +129,8 @@ public class Admin_menuItemAdapter extends RecyclerView.Adapter<Admin_menuItemVi
 
                 builder.setView(popupView);
                 final AlertDialog dialog = builder.create();
-                Actions.setupMenuItemPopUp(b, dialog, name, desc, price, amount, type, item.id, error, mainActivity);
+                Actions.setupMenuItemPopUp(b, dialog, name, desc, price, amount
+                    , type, item.id, error, mainActivity);
                 dialog.show();
 //              -- POPUP
             }
